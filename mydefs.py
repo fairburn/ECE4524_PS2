@@ -30,17 +30,19 @@ OP = {'AND': '&', 'OR': '|', 'NOR': '|', 'NAND': '&'}
 def help_msg(quit):
     """
     Print a help message to the screen.
+    If quit == True, exit the program
     """
     print \
 """\
-Usage: logic_analyzer.py test<X>
-    Replace <X> with the test number you want to run. The program will automatically load the corresponding netlist and input files
-    from the 'logic_analyzer_examples' local directory. For example, to run test 1 you would type
+Usage: logic_analyzer.py <netlist_file> <timing_file>
+    Replace the arguments with the netlist and timing files you would like to open. The files are loaded
+    from the local 'logic_analyzer_examples' directory. For example:
 
-        > logic_analyzer.py test1
+        > logic_analyzer.py test1.net test1.in
+        (loads test1.net as the netlist and test1.in as the timing input from ./logic_analyzer_examples/)
 
-
-    After starting a test, you can use these commands:
+    After starting the program, you can use these commands:
+    (Note: type 'time' without the quotes in front of your command to view the execution time)
 
     COMMAND	    DESCRIPTION
     list	    Print circuit node labels as a comma separated list.

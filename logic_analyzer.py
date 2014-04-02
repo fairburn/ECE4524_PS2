@@ -1,8 +1,21 @@
 from parse import *
+from os import path
 import sys
+import time
 
-if len(sys.argv) != 2:
+# Handle command line args
+if len(sys.argv) != 3:
     help_msg(True)
+netfile = ex_path + sys.argv[1]
+infile = ex_path + sys.argv[2]
+
+# Make sure files exist
+if not path.isfile(netfile):
+    print netfile, 'could not be found.'
+    exit()
+if not path.isfile(infile):
+    print infile, 'could not be found.'
+    exit()
 
 # Dictionaries containing the netlist and timing stimulus data.
 # The format of these structures is explained in parse.py
@@ -10,13 +23,14 @@ net = {}
 timing = {}
 
 # Populate the dictionaries
-print 'Loading', sys.argv[1] + '...',
-parse_netlist(net, sys.argv[1] + '.net')
-parse_stimulus(timing, sys.argv[1] + '.in')
+print 'Parsing', netfile, 'and', infile + '...',
+parse_netlist(net, netfile)
+parse_stimulus(timing, infile)
 print 'Done'
 
 #__________________________________________________________
-# Populate the knowledge base
+# Populate the knowledge base and begin polling user input.
+
 kb = logic.PropKB()
 
 # Tell the KB all of the input values at the discrete points in time.
@@ -38,5 +52,19 @@ for gate in net:
 
 # Wait for a user command and then execute
 while True:
-    cmd = wait_for_user()
-    execute(cmd, net, timing, kb, tp)
+    cmd = wait_for_user().split(' ')
+
+    # See if the user wants to view execution time
+    time_exec = False
+    if cmd[0] == 'time':
+        time_exec = True
+        start_time = time.time()
+        cmd.remove('time')
+
+    # Execute the command
+    execute(' '.join(cmd), net, timing, kb, tp)
+
+    # Show the execution time if asked to do so
+    if time_exec:
+        end_time = time.time()
+        print 'Finished in', end_time - start_time, 'seconds.'

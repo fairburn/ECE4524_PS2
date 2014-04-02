@@ -10,7 +10,7 @@ def parse_netlist(netlist, netfile):
     assert isinstance(netfile, str)
     
     gate_strlist = []
-    with open(ex_path + netfile) as f:
+    with open(netfile) as f:
         for line in f:
             # Clean up gate string so it can be formatted for netlist addition
             gate_strlist.append(line.replace(' ', '').replace('(', '').replace(')', '').strip())
@@ -44,7 +44,7 @@ def parse_stimulus(stimulus, infile):
 
     # Get timing information from file, being sure to ignore whitespace
     timing = ''
-    with open(ex_path + infile) as f:
+    with open(infile) as f:
         for line in f:
             timing += line.replace(' ', '').strip()
 
